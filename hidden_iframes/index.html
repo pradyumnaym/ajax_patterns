@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Dinner Date Planner</title>
+        <script>
+            function update(st){
+                document.querySelector("#div1").innerHTML = st;
+            }
+        </script>
+    </head>
+    <body>
+    <form action="getdata.php" method="POST" target="iframe1">
+        <label for="ambience"> Ambience</label>
+        <select name = "ambience">
+            <option>Romantic</option>
+            <option>Candle Light</option> 
+            <option>Casual</option>
+            <option>Fine Dining</option>
+        </select><br>
+        <label for = "cuisine">Cuisine</label>
+        <select name = "cuisine">
+            <option>Chinese</option>
+            <option>Continental</option>
+            <option>Multicuisine</option>
+            <option>Cnntinental</option>
+            <option>Thai</option>
+        </select><br>
+        <label for = "location">Location</label>
+        <select name = "location">
+            <option>Indiranagar</option>
+            <option>Koramangala</option>
+            <option>Frazer Town</option>
+            <option>Jayanagar</option>
+            <option>Thai</option>
+        </select><br>
+        <label>Valet Parking</label>
+        <input type = "radio" name = "valet" value = "Y" id = "Yes"><label for = "Yes">Yes</label>
+        <input type = "radio" name = "valet" value = "N" id = "No"><label for = "No">No</label>
+        <input type = "submit" name = "submit" value = "Submit!">
+    </form>
+    <iframe  id = "iframe1" name = "iframe1" style = "display: none;"></iframe>
+    <div id = "div1"></div>
+    </body>
+</html>     

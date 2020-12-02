@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<script type="text/javascript">
+		i=1;
+		var obj1={
+		foo:function()
+		{
+
+			var e=document.getElementById("cell");
+			var value="blank";
+			console.log(value);
+			xhr=new XMLHttpRequest();
+			xhr.open("GET","tochange.php?value="+value,true)
+			xhr.onreadystatechange=obj1.firstfoo;
+			xhr.send()
+
+
+		},
+		firstfoo:function()
+		{
+			if(this.readyState==4 && this.status==200)
+				{
+					var data=this.responseText;
+					var list=data.split(".");
+
+					document.getElementById("cse").innerHTML=list[0]
+					document.getElementById("ece").innerHTML=list[1]
+					document.getElementById("me").innerHTML=list[2]
+					document.getElementById("bt").innerHTML=list[3]
+				}
+		}
+
+	}
+	setInterval(obj1.foo,2000);
+		function init()
+		{
+			obj=new Data();
+			obj.getData();
+			c=setInterval(obj.showScore,5000);
+		}
+		function Data()
+		{
+			this.getData=function()
+			{
+				var e=document.getElementById("cell");
+				var value=e.options[e.selectedIndex].value;
+				console.log(value);
+				xhr=new XMLHttpRequest();
+				xhr.timeout=5000;
+				xhr.ontimeout=obj.backoff;
+				xhr.open("GET","http://localhost/Week5/tochange.php?value="+value,true)
+				xhr.onreadystatechange=obj.showScore
+				xhr.send()
+			}
+			this.backoff=function()
+			{
+				console.log("in backoff");
+				clearInterval(c);
+				time=5000*i;
+				console.log("Will call after=",time);
+				i=2*i;
+				c=setInterval(obj.showScore,time);
+
+			}
+			this.showScore=function()
+			{
+				
+				if(this.readyState==4 && this.status==200)
+				{
+					console.log("i");
+					var data=this.responseText;
+					var list=data.split(".");
+
+					document.getElementById("cse").innerHTML=list[0]
+					document.getElementById("ece").innerHTML=list[1]
+					document.getElementById("me").innerHTML=list[2]
+					document.getElementById("bt").innerHTML=list[3]
+					//xhr.abort();
+				}
+			}
+
+		}
+
+	</script>
+</head>
+<body onload="obj1.foo()">
+		<table border="5px">
+			<tr>
+			<td colspan="10">PES University seat Availability Matrix</td>
+			</tr>
+			<tr>
+				<td>CSE</td>
+				<td>ECE</td>
+				<td>ME</td>
+				<td>BT</td>
+			</tr>
+			<tr>
+				<td id="cse"></td>
+				<td id="ece"></td>
+				<td id="me"></td>
+				<td id="bt"></td>
+			</tr>
+
+		</table>
+		<br><br><br>
+		<select id="cell">
+				<option value="blank">Nothing</option>
+	  			<option value="CSE">cse</option>
+	  			<option value="ECE">Electronics</option>
+	  			<option value="ME">Mechanical</option>
+	  			<option value="BT">Biotech</option>
+		</select>
+		<br><br>
+		<button onclick="init()">Submit it here</button>
+</body>
+</html>

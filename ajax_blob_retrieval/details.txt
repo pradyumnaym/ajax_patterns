@@ -1,0 +1,6 @@
+Video,Dolittle Trailer,Dolittle (2020) Official Trailer, Cast: Robert Downey Jr., Length: 2:20, Release Date: 01-01-2020
+Audio,Dolittle OST,What A Wonderful World (Official Audio), Artist: Reuben and the Dark x AG, Length: 0:23, Release Date: 01-12-2019
+Image,Dolittle Poster,Dolittle Official Poster ft. Robert Downey Jr., Dimensions: 260 x 386, Format: JPEG
+Video,Bad Boys Trailer,Bad Boys For Life (2020) Official Trailer, Cast: Will Smith & Martin Lawrence, Budget: $90M, Release Date: 17-01-2020
+Audio,Bad Boys OST,RITMO (Bad Boys For Life) (Remix) (Official Music Video), Artist: The Black Eyed Peas & J Balvin, Length: 3:28, Release Date: 11-10-2019
+Image,Bad Boys Poster,Bad Boys For Life Official Poster ft. Will Smith & Martin Lawrence, Dimensions: 260 x 386, Format: JPEG

@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>Media Management system</title>
+        <script>
+
+            function getCaptions(type, caption){
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if(this.readyState==4 && this.status==200){
+                        div1.innerHTML = this.responseText;
+                    }
+                }
+                xhr.open("GET", "getmedia.php?type="+type+"&caption="+caption);
+                xhr.send();
+            }
+
+            function getData(f){
+                var xhr = new XMLHttpRequest();
+                xhr.responseType="blob";
+                xhr.onreadystatechange=function(){
+                    if(this.readyState == 4){
+                        console.log(this.response);
+                        if(this.status==200){
+                            console.log("200");
+                            var newele = 0;
+                            while (div1.firstChild) {
+                                div1.removeChild(div1.firstChild);
+                            }
+                            if(f.type.value == "Video"){
+                               newele = document.createElement("video");
+                            }else if(f.type.value == "Audio"){  
+                                newele = document.createElement("audio");
+                                newele.controls = true;
+                            }else{
+                                newele = document.createElement("img");
+                            }
+                            newele.src = URL.createObjectURL(this.response);
+                            div1.appendChild(newele);
+                            if(f.type.value=="Video" || f.type.value == "Audio"){
+                                newele.play();
+                                newele.controls = true;
+                            }
+
+                            getCaptions(f.type.value, f.caption.value);
+                        }
+                        else{
+                            document.querySelector("#div1").innerHTML = "Not found! check the values";
+                            console.log("err400");
+                        }
+                    }
+                }
+
+                xhr.open("GET", "getmedia.php?type="+f.type.value+"&caption="+f.caption.value);
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <form onsubmit = "getData(this)" action = "javascript:void(0);">
+            <select name = "type">
+                <option>Video</option>
+                <option>Audio</option>
+                <option>Image</option>
+            </select>
+            <select name = "caption">
+                <option>Dolittle Trailer</option>
+                <option>Dolittle OST</option>
+                <option>Dolittle Poster</option>
+                <option>Bad Boys Trailer</option>
+                <option>Bad Boys OST</option>
+                <option>Bad Boys Poster</option>
+            </select>
+            <input type = "submit" value = "submit" name = "submit">
+        </form>
+        <div id = "div1"></div>
+    </body>
+</html>

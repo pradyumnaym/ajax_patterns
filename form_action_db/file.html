@@ -1,0 +1,26 @@
+<html>
+<head><title>Library Management System</title></head>
+<script>
+	function evalcode(o){
+		console.log(o.c.value);
+		if(o.c.value.length == 6){
+			return true;	
+		}
+		alert("invalid book code!")
+		return false;
+	}	
+</script>
+<body>
+	<form method="GET" onsubmit = "return evalcode(this)" action = "add.php">
+		<label>Title : <input type="text" name="name" /></label></br>
+		<label>Code : <input type="text" name="c" /></label></br>
+		<label>Author : <input type="text" name="a" /></label></br>
+		<input type="submit" value="ADD" name="add">	
+	</form>
+
+	<form  onsubmit = "return evalcode(this)"method="GET" action="view.php">
+		<label>Book Code : <input type="text" name="c" /></label></br>
+		<input type="submit" value="View Book" name="view">	
+	</form>
+</body>
+</html>

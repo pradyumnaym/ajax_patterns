@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>
+            RSS
+        </title>
+        <script>
+            obj = {
+                getData: function(){
+                    console.log("inside");
+                    this.xhr= null;
+                    this.xhr = new XMLHttpRequest();
+                    this.xhr.responseType = "document";
+                    this.xhr.onreadystatechange = obj.showData;
+                    this.xhr.open("GET", "getdata.php");
+                    this.xhr.send();
+                },
+                showData : function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        console.log("inside state");
+
+                        while (div1.firstChild) {
+                            div1.removeChild(div1.lastChild);
+                        }
+
+                        var xmldoc = this.responseXML.documentElement;
+                        var titles = xmldoc.querySelectorAll("item >title");
+                        var descriptions = xmldoc.querySelectorAll("item description");
+                        var links = xmldoc.querySelectorAll("item>link");
+                        console.log(titles.length, descriptions.length);
+                        titles.forEach((element, index) => {
+                            var container = document.createElement("div");
+                            var t = document.createElement("a");
+                            t.innerHTML = element.innerHTML;
+                            t.href = links[index].innerHTML;
+                            var d = document.createElement("p");
+                            d.innerHTML = descriptions[index].innerHTML;
+
+                            if(descriptions[index].innerHTML.length >=200){
+                                d.innerHTML = descriptions[index].innerHTML.substring(0, 200);
+                                var button = document.createElement("button");
+                                d.data = descriptions[index].innerHTML
+                                d.onclick = function(){
+                                    this.innerHTML = this.data;
+                                }
+                                button.innerHTML = "read more";
+                                d.appendChild(button);
+                            }
+
+                            container.appendChild(t);
+                            container.appendChild(d);
+                            div1.appendChild(container);
+                        });
+
+                        setTimeout(obj.getData, Number(xmldoc.querySelector("ttl").innerHTML)*1000*60);
+                    }else{
+                        var a = 10;
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body onload = "obj.getData()">
+        <div>Variety Entertainment Update</div>
+        <div id = "div1"></div>
+
+    </body>
+</html>

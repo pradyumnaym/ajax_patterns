@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title id = "title"></title>
+    </head>
+    <script>
+        obj = {
+            sendMessage(){
+                obj.xhr = new XMLHttpRequest();
+                
+                obj.xhr.open("GET", `update.php?message=${message.value}&user=${obj.usrname}.txt`);
+                obj.xhr.send();
+                divele = document.createElement("div");
+                divele.innerHTML = `You: ${message.value}`;
+                div1.appendChild(divele);
+                message.value = "";
+            },
+            seteventsource(){
+                obj.es = new EventSource(`chat.php?file=${username.value}.txt`);
+                obj.es.onmessage = obj.handlemessage;
+                if(username.value == "user1") obj.usrname = "user2";
+                 else obj.usrname = "user1";
+            },
+            handlemessage(e){
+                divele = document.createElement("div");
+                divele.innerHTML = `${obj.usrname}: ${e.data}`;
+                div1.appendChild(divele);
+                console.log(e.data);
+            }
+        }
+    </script>
+    <body>
+        <select id = 'username'>
+            <option>user1</option>
+            <option>user2</option>
+        </select>
+        <button onclick = "obj.seteventsource()">Confirm User</button>
+        <div id = "div1" style = "border: 3px solid black;"></div>
+        <input type="text" id = "message">
+        <button onclick="obj.sendMessage()">Send</button>
+    </body>
+</html>

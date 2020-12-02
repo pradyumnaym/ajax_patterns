@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>
+            Week 5!
+        </title>
+        <script>
+            imagearray = [];
+            currentimg = 0;
+            imagedescriptions = [];
+
+            window.onload = ()=>{
+                //get the image and add it to the scroller
+                xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status==200 ){
+                        div1.innerHTML = this.responseText;
+                        setTimeout(getImages, 1000);
+                    }else{
+                        console.log("php error", this.responseText);
+                    }
+                }
+                xhr.open("GET", "getdesc.php", true);
+                xhr.send();
+            }
+
+            function getimagedescription(img){
+                xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status==200 ){
+                        imagedescriptions.push(this.responseText);
+                        changeimg(0);
+                    }else{
+                        console.log("php error", this.responseText);
+                    }
+                }
+                xhr.open("GET", "getimagedesc.php?img="+img, true);
+                xhr.send();
+            }
+            
+            function getImages(){
+                if(imagearray.length!=4){
+                    xhr = new XMLHttpRequest();
+                    xhr.responseType = "blob";
+                    xhr.onloadend = function(){
+                        if(this.status==200){
+                            imagearray.push(URL.createObjectURL(this.response));
+                            console.log("got it");
+                            img1.src = imagearray[imagearray.length-1];
+                            currentimg = imagearray.length-1;
+                            back.style.display = "block";
+                            forward.style.display = "block";
+                            getimagedescription("img"+(imagearray.length-1)+".jpeg");
+                            setTimeout(getImages, 1000);
+                        }else{
+                            console.log("didnt get the image", this.status);
+                        }
+                        //setTimeout(getImages, 5000);
+                    }
+                    xhr.open("GET", "getimage.php?img=img"+(imagearray.length+1)+".jpeg", true);
+                    xhr.send();
+                }
+            }
+
+            function changeimg(x){
+                currentimg+=x;
+                if(currentimg<0) currentimg+=imagearray.length;
+                currentimg%=imagearray.length;
+                img1.src = imagearray[currentimg];
+                desc.innerHTML = imagedescriptions[currentimg];
+            }
+
+        </script>
+    </head>
+    
+    <body>
+        <div id = "div1"></div>
+        <div id = "imageslider" width = "100%">
+            <button onclick="changeimg(-1)" id = "back" style="display: none;">prev</button>
+            <img id = "img1">
+            <button onclick="changeimg(1)" id ="forward"  style="display: none;">next</button>
+        </div>
+        <div id = "desc"></div>
+
+    </body>
+
+</html>

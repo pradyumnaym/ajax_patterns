@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>PESSAT Seat Matrix Display system</title>
+        <script>
+            obj = {
+                timeout: 500,
+                intervalobj : null, 
+                startTimer : function(){
+                    console.log("in starttimer");
+                    this.intervalobj = setInterval(this.getData, this.timeout+500);
+                },
+                backoff : function(e){
+                    obj.xhr.abort();
+                    obj.timeout=obj.timeout*2;
+                    console.log(`Inside backoff, new time=${obj.timeout/1000} seconds`)
+                    clearInterval(obj.intervalobj);
+                    obj.intervalobj = setInterval(obj.getData, obj.timeout+500);
+                },
+                getData: function(){
+                    console.log("in");
+                    obj.xhr = new XMLHttpRequest();
+                    obj.xhr.onreadystatechange = obj.setData;
+                    obj.xhr.timeout = obj.timeout;
+                    obj.xhr.ontimeout = obj.backoff;
+                    obj.xhr.responseType = "json";
+                    obj.xhr.open("GET", "getseat.php");
+                    obj.xhr.send();
+                },
+                setData : function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        for(var key in this.response){
+                            document.getElementById(key).innerHTML = this.response[key];
+                        }
+                        obj.timeout = 500;
+                        console.log(`got response, resetting timer to ${obj.timeout/1000} seconds`);
+                    }
+                },
+                setjson: function(form){
+                    //var formData =  new FormData(form);
+                    console.log(form.branch.value);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "setseat.php?branch="+form.branch.value);
+                    xhr.send();
+                    return false;
+                }
+            }
+        </script>
+    </head>
+    <body onload = "obj.startTimer();" >
+        <table border=1px cellpadding = 5>
+            <tr>
+                <th>CSE</th>
+                <th>ECE</th>
+                <th>ME</th>
+                <th>BT</th>
+            </tr>
+            <tr>
+                <td id = "CSE"></td>
+                <td id = "ECE"></td>
+                <td id = "ME"></td>
+                <td id = "BT"></td>
+            </tr>
+            <tr>
+                    <form onsubmit = "return obj.setjson(this);" id= "newform" action="">
+                        <td colspan="2">
+                            <select name="branch">
+                                <option>CSE</option>
+                                <option>ECE</option>
+                                <option>ME</option>
+                                <option>BT</option>
+                            </select>
+                        </td>
+                
+                   <td colspan="2"><input type = "submit" name = "submit" value = "submit"></td> 
+                </form>
+            </tr>
+            
+            
+        </table>
+    </body>
+</html>
